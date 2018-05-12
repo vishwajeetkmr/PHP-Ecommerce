@@ -1,4 +1,23 @@
-<?php require_once '../config/connect.php'; ?>
+<?php 
+session_start();
+require_once '../config/connect.php'; 
+if(isset($_POST) & !empty($_POST)){
+	$email = mysqli_real_escape_string($connection, $_POST['email']);
+	$password = $_POST['password'];
+
+	$sql = "SELECT * FROM admin WHERE email='$email' AND password='$password'";
+	$result = mysqli_query($connection, $sql) or die(mysqli_error($connection));
+	$count = mysqli_num_rows($result);
+	if($count == 1){
+		//echo "User exits, create session";
+		$_SESSION['email'] = $email;
+		header("location: index.php");
+	}else{
+		$fmsg = "Invalid Login Credentials";
+	}
+}
+
+?>
 <!DOCTYPE html>
 <!--[if IE 8]>			<html class="ie ie8"> <![endif]-->
 <!--[if IE 9]>			<html class="ie ie9"> <![endif]-->
